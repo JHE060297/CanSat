@@ -13,6 +13,10 @@ El Cansat es un picosatelite que se encuentra dentro de una lata, diseñado para
 -Sensor DHT22
 -Sensor BME280
 
+## Agradecimientos 
+
+![Semillero Phoenix](D:\Semillero PHONEX\CanSat\assets\Phoenix.jpeg)
+
 ## Recursos adicionales 
 
 En este repositorio, encontrarás los siguientes recursos adicionales:
