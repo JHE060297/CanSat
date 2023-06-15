@@ -59,8 +59,6 @@ while True:
 
     valores_str = ", ".join(str(numero) for numero in numeros)
 
-    print(valores_str)
-
     consulta = f"INSERT INTO DatosSensor (tempBME, presion, altitud, humBME, tempDHT, humDHT) VALUES ({valores_str}) "
 
     cursor.execute(consulta)
