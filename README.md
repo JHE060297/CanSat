@@ -8,10 +8,10 @@ El Cansat es un picosatelite que se encuentra dentro de una lata, diseñado para
 
 ## Componentes utilizados 
 
--Arduino Uno 
--Módulos RF24L01+PA/LNA
--Sensor DHT22
--Sensor BME280
+- Arduino Uno 
+- Módulos RF24L01+PA/LNA
+- Sensor DHT22
+- Sensor BME280
 
 ## Agradecimientos 
 
