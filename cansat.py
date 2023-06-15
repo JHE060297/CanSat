@@ -1,5 +1,5 @@
 import serial
-import mysql.connector
+import pyodbc
 import csv
 import time
 
@@ -7,13 +7,40 @@ import time
 # Configurar la comunicación serie
 ser = serial.Serial('COM6', 9600)  # Ajusta el puerto y la velocidad según corresponda
 
-# Configuracion de la conexión a la base de datos MySQL
-conexion = mysql.connector.connect(
-    host = "localhost:3306",
-    user = "root",
-    password = "0602",
-    database = "data_sensor"
-)
+# # Configuracion de la conexión a la base de datos
+# server = 'tcp:data-sensor.database.windows.net'
+# database = 'data_sensor'
+# username = '{jhoan.aristizabal@uniminuto.edu.co}'
+# password = '{Jhe2390939**}'
+# driver = '{ODBC Driver 18 for SQL Server}'
+
+# # Driver={ODBC Driver 18 for SQL Server};Server=tcp:data-sensor.database.windows.net,1433;Database=data_sensor;Uid={your_user_name};Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;Authentication=ActiveDirectoryPassword
+
+# conn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
+try:
+    # Configuración de la conexión a la base de datos
+    server = 'tcp:data-sensor.database.windows.net'
+    database = 'data_sensor'
+    username = '{jhoan.aristizabal@uniminuto.edu.co}'
+    password = '{Jhe2390939**}'
+    driver = '{ODBC Driver 18 for SQL Server}'
+
+    # Establecer la conexión a la base de datos
+    conn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+
+    cursor = conn.cursor()
+
+    # Imprimir un mensaje si la conexión se estableció correctamente
+    print("Conexión exitosa a la base de datos.")
+
+    # Resto del código...
+
+except pyodbc.Error as ex:
+    # Imprimir un mensaje si se produce un error al establecer la conexión
+    print("Error al establecer la conexión a la base de datos:", ex)
+
+# cursor = conn.cursor()
 
 # Abrir el archivo CSV
 csv_file = open('datos_sensor.csv', 'w')
