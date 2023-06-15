@@ -15,7 +15,7 @@ El Cansat es un picosatelite que se encuentra dentro de una lata, diseñado para
 
 ## Agradecimientos 
 
-![Semillero Phoenix](D:\Semillero PHONEX\CanSat\assets\Phoenix.jpeg)
+![Semillero Phoenix](https://github.com/JHE060297/Cansat/blob/main/assets/Phoenix.jpeg)
 
 ## Recursos adicionales 
 
