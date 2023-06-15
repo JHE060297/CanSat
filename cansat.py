@@ -1,34 +1,32 @@
 import serial
 import pyodbc
-import csv
 import time
-
+import re
 
 # Configurar la comunicación serie
-ser = serial.Serial('COM6', 9600)  # Ajusta el puerto y la velocidad según corresponda
-
-# # Configuracion de la conexión a la base de datos
-# server = 'tcp:data-sensor.database.windows.net'
-# database = 'data_sensor'
-# username = '{jhoan.aristizabal@uniminuto.edu.co}'
-# password = '{Jhe2390939**}'
-# driver = '{ODBC Driver 18 for SQL Server}'
-
-# # Driver={ODBC Driver 18 for SQL Server};Server=tcp:data-sensor.database.windows.net,1433;Database=data_sensor;Uid={your_user_name};Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;Authentication=ActiveDirectoryPassword
-
-# conn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
+ser = serial.Serial("COM6", 9600)  # Ajusta el puerto y la velocidad según corresponda
 
 try:
     # Configuración de la conexión a la base de datos
-    server = 'tcp:data-sensor.database.windows.net'
-    database = 'data_sensor'
-    username = '{jhoan.aristizabal@uniminuto.edu.co}'
-    password = '{Jhe2390939**}'
-    driver = '{ODBC Driver 18 for SQL Server}'
+    server = "tcp:serverejemplo.database.windows.net"
+    database = "pruebasensor"
+    username = "{jhe0602}"
+    password = "{Jhe2390939**}"
+    driver = "{ODBC Driver 18 for SQL Server}"
 
     # Establecer la conexión a la base de datos
-    conn = pyodbc.connect('DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
-
+    conn = pyodbc.connect(
+        "DRIVER="
+        + driver
+        + ";SERVER="
+        + server
+        + ";PORT=1433;DATABASE="
+        + database
+        + ";UID="
+        + username
+        + ";PWD="
+        + password
+    )
     cursor = conn.cursor()
 
     # Imprimir un mensaje si la conexión se estableció correctamente
@@ -40,12 +38,6 @@ except pyodbc.Error as ex:
     # Imprimir un mensaje si se produce un error al establecer la conexión
     print("Error al establecer la conexión a la base de datos:", ex)
 
-# cursor = conn.cursor()
-
-# Abrir el archivo CSV
-csv_file = open('datos_sensor.csv', 'w')
-csv_writer = csv.writer(csv_file)
-
 
 tiempo_inicio = time.time()
 # Leer los datos serie y escribirlos en el archivo CSV
@@ -54,20 +46,32 @@ while True:
     data = ser.readline().decode().strip()  # Decodificar los bytes recibidos a texto
 
     # Dividir los valores en función del separador utilizado (coma en este caso)
-    valores = data.split(',')
+    valores = data.split(",")
+    # print(valores)
 
-    # Escribir los valores en el archivo CSV
-    csv_writer.writerow(valores)
+    numeros = []
+    for valor in valores:
+        # Buscar números decimales en el elemento
+        matches = re.findall(r"\d+\.\d+", valor)
+        if matches:
+            numero = float(matches[0])  # Convertir a tipo float
+            numeros.append(numero)
 
-    # Mostrar los valores en la consola
-    print(data)
+    valores_str = ", ".join(str(numero) for numero in numeros)
+
+    print(valores_str)
+
+    consulta = f"INSERT INTO DatosSensor (tempBME, presion, altitud, humBME, tempDHT, humDHT) VALUES ({valores_str}) "
+
+    cursor.execute(consulta)
+    conn.commit()
 
     # Detener la captura después de un minuto
     tiempo_actual = time.time()
     tiempo_transcurrido = tiempo_actual - tiempo_inicio
-    if tiempo_transcurrido >= 60:
+    if tiempo_transcurrido >= 18000:
         break
 
-# Cerrar el archivo CSV y la comunicación serie
-csv_file.close()
+# Cerrar conexion BD y la comunicación serie
+conn.close()
 ser.close()
