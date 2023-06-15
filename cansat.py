@@ -10,8 +10,8 @@ ser = serial.Serial('COM6', 9600)  # Ajusta el puerto y la velocidad según corr
 # # Configuracion de la conexión a la base de datos
 # server = 'tcp:data-sensor.database.windows.net'
 # database = 'data_sensor'
-# username = '{jhoan.aristizabal@uniminuto.edu.co}'
-# password = '{Jhe2390939**}'
+# username = '{usuario}'
+# password = '{*********}'
 # driver = '{ODBC Driver 18 for SQL Server}'
 
 # # Driver={ODBC Driver 18 for SQL Server};Server=tcp:data-sensor.database.windows.net,1433;Database=data_sensor;Uid={your_user_name};Pwd={your_password_here};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;Authentication=ActiveDirectoryPassword
@@ -22,8 +22,8 @@ try:
     # Configuración de la conexión a la base de datos
     server = 'tcp:data-sensor.database.windows.net'
     database = 'data_sensor'
-    username = '{jhoan.aristizabal@uniminuto.edu.co}'
-    password = '{Jhe2390939**}'
+    username = '{usuario}'
+    password = '{*********}'
     driver = '{ODBC Driver 18 for SQL Server}'
 
     # Establecer la conexión a la base de datos
