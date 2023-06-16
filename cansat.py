@@ -1,17 +1,20 @@
 import serial
+import os
 import pyodbc
 import time
 import re
-
+from dotenv import load_dotenv
 # Configurar la comunicación serie
 ser = serial.Serial("COM6", 9600)  # Ajusta el puerto y la velocidad según corresponda
 
 try:
     # Configuración de la conexión a la base de datos
-    server = "tcp:serverejemplo.database.windows.net"
-    database = "pruebasensor"
-    username = "{jhe0602}"
-    password = "{Jhe2390939**}"
+    load_dotenv()
+
+    server = os.getenv('DB_SERVER')
+    database = os.getenv('DB_NAME')
+    username = os.getenv('DB_USER')
+    password = os.getenv('DB_PASSWORD')
     driver = "{ODBC Driver 18 for SQL Server}"
 
     # Establecer la conexión a la base de datos
@@ -54,7 +57,9 @@ while True:
             numero = float(matches[0])  # Convertir a tipo float
             numeros.append(numero)
 
-    consulta = f"INSERT INTO DatosSensor (tempBME, presion, altitud, humBME, tempDHT, humDHT) VALUES (?,?,?,?,?,?)"
+    # print(numeros)
+
+    consulta = f"INSERT INTO sensors_data (tempBME, presion, altitud, humBME, tempDHT, humDHT) VALUES (?,?,?,?,?,?)"
 
     for valor in numeros:
         cursor.execute(consulta, numeros)
@@ -63,7 +68,7 @@ while True:
     # Detener la captura después de un minuto
     tiempo_actual = time.time()
     tiempo_transcurrido = tiempo_actual - tiempo_inicio
-    if tiempo_transcurrido >= 10800:
+    if tiempo_transcurrido >= 3600:
         break
 
 # Cerrar conexion BD y la comunicación serie
