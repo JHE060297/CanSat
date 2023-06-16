@@ -4,8 +4,9 @@ import pyodbc
 import time
 import re
 from dotenv import load_dotenv
-# Configurar la comunicación serie
-ser = serial.Serial("COM6", 9600)  # Ajusta el puerto y la velocidad según corresponda
+
+# Configurar la comunicación serie 
+ser = serial.Serial("COM6", 9600)  # Ajustar el puerto y la velocidad según corresponda
 
 try:
     # Configuración de la conexión a la base de datos
@@ -47,7 +48,7 @@ while True:
 
     # Dividir los valores en función del separador utilizado (coma en este caso)
     valores = data.split(",")
-    # print(valores)
+    #print(valores)
 
     numeros = []
     for valor in valores:
@@ -56,8 +57,7 @@ while True:
         if matches:
             numero = float(matches[0])  # Convertir a tipo float
             numeros.append(numero)
-
-    # print(numeros)
+    #print(numeros)
 
     consulta = f"INSERT INTO sensors_data (tempBME, presion, altitud, humBME, tempDHT, humDHT) VALUES (?,?,?,?,?,?)"
 
@@ -65,7 +65,7 @@ while True:
         cursor.execute(consulta, numeros)
         conn.commit()
 
-    # Detener la captura después de un minuto
+    # Detener la captura después de un tiempo determinado en este caso 3600
     tiempo_actual = time.time()
     tiempo_transcurrido = tiempo_actual - tiempo_inicio
     if tiempo_transcurrido >= 3600:
