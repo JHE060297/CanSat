@@ -19,24 +19,24 @@ const int pinCSN = 10;
 
 RF24 radio(pinCE, pinCSN);
 
-byte direccion[5] = {'j', 'h', 'o', 'a', 'n'};
+byte direccion[5] = { 'j', 'h', 'o', 'a', 'n' };
 int datos[16];
 
-void setup(void)
-{
+void setup(void) {
   Serial.begin(9600);
   radio.begin();
   radio.setPALevel(RF24_PA_MAX);
   radio.setDataRate(RF24_250KBPS);
   radio.setChannel(100);
-  // radio.stopListening()
+  // radio.stopListening();
   radio.openWritingPipe(direccion);
   pinMode(ledTX, OUTPUT);
 }
 
-void loop(void){
+void loop(void) {
   datos[0] = 2;
-  radio.write(datos, sizeof datos);
+  radio.write(datos, sizeof(datos));
+  delay(500);
   digitalWrite(ledTX, HIGH);
   delay(500);
   digitalWrite(ledTX, LOW);
