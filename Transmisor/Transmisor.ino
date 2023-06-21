@@ -1,30 +1,44 @@
-//Include Libraries
-#include <SPI.h>
+/* NRF24L01  ARDUINO UNO
+1: GND        pin GND
+2: VCC        pin 3v3
+3: CE         pin 9
+4: CSN        pin 10
+5: SCK        pin 13
+6: MOSI       pin 11
+7: MISO       pin 12
+*/
+
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <RF24_config.h>
+#include <SPI.h>
 
-//create an RF24 object
-RF24 radio(9, 8);  // CE, CSN
+int ledTX = 5;
+const int pinCE = 9;
+const int pinCSN = 10;
 
-//address through which two modules communicate.
-const byte address[6] = "00001";
+RF24 radio(pinCE, pinCSN);
 
-void setup() {
+byte direccion[5] = {'j', 'h', 'o', 'a', 'n'};
+int datos[16];
 
-  radio.setDataRate(RF24_2MBPS);  // Configura la velocidad de datos a 2 Mbps
-  radio.setChannel(76);           // Configura el canal a 76
+void setup(void)
+{
+  Serial.begin(9600);
   radio.begin();
-
-  //set the address
-  radio.openWritingPipe(address);
-
-  //Set module as transmitter
-  radio.stopListening();
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setChannel(100);
+  // radio.stopListening()
+  radio.openWritingPipe(direccion);
+  pinMode(ledTX, OUTPUT);
 }
-void loop() {
-  //Send message to receiver
-  const char text[] = "Hello World";
-  radio.write(&text, sizeof(text));
 
-  delay(1000);
+void loop(void){
+  datos[0] = 2;
+  radio.write(datos, sizeof datos);
+  digitalWrite(ledTX, HIGH);
+  delay(500);
+  digitalWrite(ledTX, LOW);
+  delay(500);
 }

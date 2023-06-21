@@ -1,37 +1,43 @@
-//Include Libraries
-#include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <RF24_config.h>
+#include <SPI.h>
 
-//create an RF24 object
-RF24 radio(9, 8);  // CE, CSN
+const int pinCE = 9;
+const int pinCSN = 10;
+RF24 radio(pinCE, pinCSN);
 
-//address through which two modules communicate.
-const byte address[6] = "00001";
+byte direccion[5] = {'j', 'h', 'o', 'a', 'n'};
 
-void setup() {
-  while (!Serial)
-    ;
+int datos[16];
+int led = 5;
+
+void setup(void){
   Serial.begin(9600);
-
-  radio.setDataRate(RF24_2MBPS);  // Configura la velocidad de datos a 2 Mbps
-  radio.setChannel(76);           // Configura el canal a 76
-
   radio.begin();
+  radio.setPALevel(RF24_PA_MAX);
+  radio.setChannel(100);
+  radio.setDataRate(RF24_250KBPS);
+  radio.openReadingPipe(1, direccion);
 
-  //set the address
-  radio.openReadingPipe(0, address);
-
-  //Set module as receiver
   radio.startListening();
+  pinMode(led, OUTPUT);
 }
 
-void loop() {
-  //Read the data if available in buffer
-  if (radio.available()) {
-    Serial.print("Esperando info...");
-    char text[32] = { 0 };
-    radio.read(&text, sizeof(text));
-    Serial.println(text);
+void loop(void){
+  if(radio.available()){
+    radio.read(datos, sizeof datos);
+    Serial.print("Dato recibido: ");
+    Serial.println( datos[0]);
+    if(datos[0] == 2){
+      digitalWrite(led, HIGH);
+      delay(500);
+      digitalWrite(led, LOW);
+      delay(500);
+    }else{
+      digitalWrite(led, LOW);
+    }
+  }else{
+    Serial.println("No hay datos de TX");
   }
 }
